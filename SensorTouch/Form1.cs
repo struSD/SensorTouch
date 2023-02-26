@@ -24,13 +24,13 @@ namespace SensorTouch
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
+            Graphics paintDot = pictureBox1.CreateGraphics();
+
             if (arrayValue[currentPointIndex] >= filterValueMin && arrayValue[currentPointIndex] <= filterValueMax)
             {
-                Graphics paintDot = pictureBox1.CreateGraphics();
+                label2_XY.Text = String.Format($"X:{arrayY[currentPointIndex]} - Y:{currentPointIndex}");
 
-                label2_XY.Text = String.Format($"X:{currentPointIndex} - Y:{arrayY[currentPointIndex]}");
-
-                paintDot.FillEllipse(Brushes.Red, currentPointIndex, arrayY[currentPointIndex], 7, 7);
+                paintDot.FillEllipse(Brushes.Red, arrayY[currentPointIndex], currentPointIndex, 7, 7);
             }
 
             currentPointIndex++;
