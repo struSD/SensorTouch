@@ -146,8 +146,18 @@ namespace SensorTouch
         }
         private void button5_Click_AplyMaxValue(object sender, EventArgs e)
         {
-            filterValueMax = int.Parse(textBox2.Text);
-            filterValueMin = int.Parse(textBox1.Text);
+
+            try
+            {
+                filterValueMax = int.Parse(textBox2.Text);
+                filterValueMin = int.Parse(textBox1.Text);
+            }
+            catch(Exception ex) 
+            {
+                MessageBox.Show($"{ex.Message}", "Something wrong", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                Application.Restart();
+            }
         }
+
     }
 }
