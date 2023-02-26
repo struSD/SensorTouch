@@ -1,16 +1,18 @@
 using System;
+using System.Drawing;
 using static System.Windows.Forms.LinkLabel;
 
 namespace SensorTouch
 {
     public partial class Form1 : Form
     {
-        
-        private int filterValue = 1000;
+        private int filterValueMax = 1000;
+        private int filterValueMin = 100;
         private string fileContent = string.Empty;
         private string filePath = string.Empty;
         private int[,] primaryArray;
-        private int[,] sortedArray;
+        private int[] arrayY;
+        private int[] arrayValue;
         private int currentPointIndex = 0;
         public Form1()
         {
@@ -22,10 +24,14 @@ namespace SensorTouch
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
-            label2_XY.Text = String.Format($"X:{primaryArray[currentPointIndex, 1]} - Y:{primaryArray[currentPointIndex, 0]}");
+            if (arrayValue[currentPointIndex] >= filterValueMin && arrayValue[currentPointIndex] <= filterValueMax)
+            {
+                Graphics paintDot = pictureBox1.CreateGraphics();
 
-            Graphics paintDot = pictureBox1.CreateGraphics();
-            paintDot.FillEllipse(Brushes.Red, sortedArray[currentPointIndex, 1], sortedArray[currentPointIndex, 0], 3, 3);
+                label2_XY.Text = String.Format($"X:{currentPointIndex} - Y:{arrayY[currentPointIndex]}");
+
+                paintDot.FillEllipse(Brushes.Red, currentPointIndex, arrayY[currentPointIndex], 7, 7);
+            }
 
             currentPointIndex++;
 
@@ -39,6 +45,7 @@ namespace SensorTouch
                 button4_Clear.Enabled = true;
                 button5_AplyMaxValue.Enabled = true;
                 textBox1.Enabled = true;
+                textBox2.Enabled = true;
             }
         }
         private void button1_Click_OpenFile(object sender, EventArgs e)
@@ -70,23 +77,25 @@ namespace SensorTouch
                         }
                     }
 
-                    sortedArray = new int[primaryArray.GetLength(0), 1];
+                    arrayY = new int[primaryArray.GetLength(0)];
+                    arrayValue = new int[primaryArray.GetLength(0)];
 
                     for (int i = 0; i < primaryArray.GetLength(0); i++)
                     {
-                        int max = int.MinValue;
+                        int pos = 0;
+                        int max = primaryArray[i, 0]; // початкове значення максимуму - перше число у рядку
 
-                        for (int j = 0; j < primaryArray.GetLength(1); j++)
+                        for (int j = 1; j < primaryArray.GetLength(1); j++)
                         {
-                            if (primaryArray[i, j] > max)
+                            if (primaryArray[i, j] > max) // знаходження найбільшого значення у рядку
                             {
                                 max = primaryArray[i, j];
+                                pos = j;
                             }
                         }
-
-                        sortedArray[i, 0] = max;
+                        arrayValue[i] = max; 
+                        arrayY[i] = pos;
                     }
-
                     trackBar1.Enabled = true;
                     trackBar1.Enabled = true;
                     button1_OpenFile.Enabled = true;
@@ -95,6 +104,7 @@ namespace SensorTouch
                     button4_Clear.Enabled = true;
                     button5_AplyMaxValue.Enabled = true;
                     textBox1.Enabled = true;
+                    textBox2.Enabled = true;
                 }
             }
         }
@@ -106,6 +116,7 @@ namespace SensorTouch
             button4_Clear.Enabled = false;
             button5_AplyMaxValue.Enabled = false;
             textBox1.Enabled = false;
+            textBox2.Enabled = false;
             timer1.Start();
         }
         private void button3_Click_Stop(object sender, EventArgs e)
@@ -115,6 +126,7 @@ namespace SensorTouch
             button4_Clear.Enabled = true;
             button5_AplyMaxValue.Enabled = true;
             textBox1.Enabled = true;
+            textBox2.Enabled = true;
             timer1.Stop();
 
         }
@@ -126,7 +138,8 @@ namespace SensorTouch
         }
         private void button5_Click_AplyMaxValue(object sender, EventArgs e)
         {
-            filterValue = int.Parse(textBox1.Text);
+            filterValueMax = int.Parse(textBox2.Text);
+            filterValueMin = int.Parse(textBox1.Text);
         }
     }
 }

@@ -40,6 +40,7 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button4_Clear = new System.Windows.Forms.Button();
             this.button5_AplyMaxValue = new System.Windows.Forms.Button();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -47,7 +48,7 @@
             // button1_OpenFile
             // 
             this.button1_OpenFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1_OpenFile.Location = new System.Drawing.Point(591, 12);
+            this.button1_OpenFile.Location = new System.Drawing.Point(1265, 12);
             this.button1_OpenFile.Name = "button1_OpenFile";
             this.button1_OpenFile.Size = new System.Drawing.Size(197, 29);
             this.button1_OpenFile.TabIndex = 0;
@@ -59,7 +60,7 @@
             // 
             this.button2_Start.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button2_Start.Enabled = false;
-            this.button2_Start.Location = new System.Drawing.Point(591, 47);
+            this.button2_Start.Location = new System.Drawing.Point(1265, 47);
             this.button2_Start.Name = "button2_Start";
             this.button2_Start.Size = new System.Drawing.Size(197, 29);
             this.button2_Start.TabIndex = 1;
@@ -71,7 +72,7 @@
             // 
             this.button3_Stop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button3_Stop.Enabled = false;
-            this.button3_Stop.Location = new System.Drawing.Point(591, 82);
+            this.button3_Stop.Location = new System.Drawing.Point(1265, 82);
             this.button3_Stop.Name = "button3_Stop";
             this.button3_Stop.Size = new System.Drawing.Size(197, 29);
             this.button3_Stop.TabIndex = 2;
@@ -83,14 +84,14 @@
             // 
             this.trackBar1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.trackBar1.Enabled = false;
-            this.trackBar1.Location = new System.Drawing.Point(591, 152);
+            this.trackBar1.Location = new System.Drawing.Point(1265, 152);
             this.trackBar1.Maximum = 2500;
             this.trackBar1.Minimum = 50;
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(197, 56);
             this.trackBar1.TabIndex = 3;
             this.trackBar1.Tag = "";
-            this.trackBar1.TickFrequency = 200;
+            this.trackBar1.TickFrequency = 50;
             this.trackBar1.Value = 100;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
@@ -98,7 +99,7 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(755, 188);
+            this.label1.Location = new System.Drawing.Point(1429, 188);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(44, 20);
             this.label1.TabIndex = 4;
@@ -116,7 +117,7 @@
             this.pictureBox1.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pictureBox1.Location = new System.Drawing.Point(12, 12);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(573, 406);
+            this.pictureBox1.Size = new System.Drawing.Size(1247, 534);
             this.pictureBox1.TabIndex = 6;
             this.pictureBox1.TabStop = false;
             // 
@@ -124,7 +125,7 @@
             // 
             this.label2_XY.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2_XY.AutoSize = true;
-            this.label2_XY.Location = new System.Drawing.Point(12, 421);
+            this.label2_XY.Location = new System.Drawing.Point(12, 549);
             this.label2_XY.Name = "label2_XY";
             this.label2_XY.Size = new System.Drawing.Size(62, 20);
             this.label2_XY.TabIndex = 7;
@@ -134,18 +135,18 @@
             // 
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(591, 214);
+            this.textBox1.Location = new System.Drawing.Point(1265, 214);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(197, 27);
+            this.textBox1.Size = new System.Drawing.Size(90, 27);
             this.textBox1.TabIndex = 9;
-            this.textBox1.Text = "1000";
+            this.textBox1.Text = "100";
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // button4_Clear
             // 
             this.button4_Clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button4_Clear.Enabled = false;
-            this.button4_Clear.Location = new System.Drawing.Point(591, 117);
+            this.button4_Clear.Location = new System.Drawing.Point(1265, 117);
             this.button4_Clear.Name = "button4_Clear";
             this.button4_Clear.Size = new System.Drawing.Size(197, 29);
             this.button4_Clear.TabIndex = 12;
@@ -157,19 +158,31 @@
             // 
             this.button5_AplyMaxValue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button5_AplyMaxValue.Enabled = false;
-            this.button5_AplyMaxValue.Location = new System.Drawing.Point(591, 247);
+            this.button5_AplyMaxValue.Location = new System.Drawing.Point(1265, 247);
             this.button5_AplyMaxValue.Name = "button5_AplyMaxValue";
             this.button5_AplyMaxValue.Size = new System.Drawing.Size(197, 29);
             this.button5_AplyMaxValue.TabIndex = 13;
-            this.button5_AplyMaxValue.Text = "Aply max value";
+            this.button5_AplyMaxValue.Text = "Aply max min value";
             this.button5_AplyMaxValue.UseVisualStyleBackColor = true;
             this.button5_AplyMaxValue.Click += new System.EventHandler(this.button5_Click_AplyMaxValue);
+            // 
+            // textBox2
+            // 
+            this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox2.Enabled = false;
+            this.textBox2.Location = new System.Drawing.Point(1372, 214);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(90, 27);
+            this.textBox2.TabIndex = 14;
+            this.textBox2.Text = "1000";
+            this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1474, 578);
+            this.Controls.Add(this.textBox2);
             this.Controls.Add(this.button5_AplyMaxValue);
             this.Controls.Add(this.button4_Clear);
             this.Controls.Add(this.textBox1);
@@ -202,5 +215,6 @@
         private TextBox textBox1;
         private Button button4_Clear;
         private Button button5_AplyMaxValue;
+        private TextBox textBox2;
     }
 }
