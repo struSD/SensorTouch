@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using static System.Windows.Forms.LinkLabel;
 
 namespace SensorTouch
@@ -8,7 +9,6 @@ namespace SensorTouch
     {
         private int filterValueMax = 1000;
         private int filterValueMin = 100;
-        private string fileContent = string.Empty;
         private string filePath = string.Empty;
         private int[,] primaryArray;
         private int[] arrayY;
@@ -59,42 +59,50 @@ namespace SensorTouch
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    filePath = openFileDialog.FileName;
-                    string[] lines = File.ReadAllLines(filePath);
-                    string[] size = lines[0].Split(',');
-                    int rowCount = lines.Length;
-                    int matrixNum1 = int.Parse(size[0]);
-                    int matrixNum2 = int.Parse(size[1]);
-                    int colCount = matrixNum1 * matrixNum2;
-                    primaryArray = new int[rowCount - 1, colCount];
-
-                    for (int i = 1; i < lines.Length; i++)
+                    try
                     {
-                        string[] values = lines[i].Split(',');
-                        for (int j = 0; j < colCount; j++)
+                        filePath = openFileDialog.FileName;
+                        string[] lines = File.ReadAllLines(filePath);
+                        string[] size = lines[0].Split(',');
+                        int rowCount = lines.Length;
+                        int matrixNum1 = int.Parse(size[0]);
+                        int matrixNum2 = int.Parse(size[1]);
+                        int colCount = matrixNum1 * matrixNum2;
+                        primaryArray = new int[rowCount - 1, colCount];
+
+                        for (int i = 1; i < lines.Length; i++)
                         {
-                            primaryArray[i - 1, j] = int.Parse(values[j]);
-                        }
-                    }
-
-                    arrayY = new int[primaryArray.GetLength(0)];
-                    arrayValue = new int[primaryArray.GetLength(0)];
-
-                    for (int i = 0; i < primaryArray.GetLength(0); i++)
-                    {
-                        int pos = 0;
-                        int max = primaryArray[i, 0]; // початкове значення максимуму - перше число у рядку
-
-                        for (int j = 1; j < primaryArray.GetLength(1); j++)
-                        {
-                            if (primaryArray[i, j] > max) // знаходження найбільшого значення у рядку
+                            string[] values = lines[i].Split(',');
+                            for (int j = 0; j < colCount; j++)
                             {
-                                max = primaryArray[i, j];
-                                pos = j;
+                                primaryArray[i - 1, j] = int.Parse(values[j]);
                             }
                         }
-                        arrayValue[i] = max; 
-                        arrayY[i] = pos;
+
+                        arrayY = new int[primaryArray.GetLength(0)];
+                        arrayValue = new int[primaryArray.GetLength(0)];
+
+                        for (int i = 0; i < primaryArray.GetLength(0); i++)
+                        {
+                            int pos = 0;
+                            int max = primaryArray[i, 0]; // початкове значення максимуму - перше число у рядку
+
+                            for (int j = 1; j < primaryArray.GetLength(1); j++)
+                            {
+                                if (primaryArray[i, j] > max) // знаходження найбільшого значення у рядку
+                                {
+                                    max = primaryArray[i, j];
+                                    pos = j;
+                                }
+                            }
+                            arrayValue[i] = max;
+                            arrayY[i] = pos;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"{ex.Message}", "Something wrong", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                        Application.Restart();
                     }
                     trackBar1.Enabled = true;
                     trackBar1.Enabled = true;
