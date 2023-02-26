@@ -41,6 +41,7 @@
             this.button4_Clear = new System.Windows.Forms.Button();
             this.button5_AplyMaxValue = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label2_CountPoint = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -177,11 +178,22 @@
             this.textBox2.Text = "1000";
             this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // label2_CountPoint
+            // 
+            this.label2_CountPoint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label2_CountPoint.AutoSize = true;
+            this.label2_CountPoint.Location = new System.Drawing.Point(112, 924);
+            this.label2_CountPoint.Name = "label2_CountPoint";
+            this.label2_CountPoint.Size = new System.Drawing.Size(96, 20);
+            this.label2_CountPoint.TabIndex = 15;
+            this.label2_CountPoint.Text = "Count points:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(982, 953);
+            this.Controls.Add(this.label2_CountPoint);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.button5_AplyMaxValue);
             this.Controls.Add(this.button4_Clear);
@@ -216,5 +228,6 @@
         private Button button4_Clear;
         private Button button5_AplyMaxValue;
         private TextBox textBox2;
+        private Label label2_CountPoint;
     }
 }

@@ -14,6 +14,7 @@ namespace SensorTouch
         private int[] arrayY;
         private int[] arrayValue;
         private int currentPointIndex = 0;
+        private int currentPointCount = 0;
         public Form1()
         {
             InitializeComponent();
@@ -31,8 +32,9 @@ namespace SensorTouch
                 label2_XY.Text = String.Format($"X:{arrayY[currentPointIndex]} - Y:{currentPointIndex}");
 
                 paintDot.FillEllipse(Brushes.Red, arrayY[currentPointIndex], currentPointIndex, 7, 7);
+                currentPointCount++;
             }
-
+            label2_CountPoint.Text = $"Count points:{currentPointCount}";
             currentPointIndex++;
 
             if (currentPointIndex >= primaryArray.GetLength(0))
@@ -85,11 +87,11 @@ namespace SensorTouch
                         for (int i = 0; i < primaryArray.GetLength(0); i++)
                         {
                             int pos = 0;
-                            int max = primaryArray[i, 0]; // початкове значення максимуму - перше число у рядку
+                            int max = primaryArray[i, 0]; 
 
                             for (int j = 1; j < primaryArray.GetLength(1); j++)
                             {
-                                if (primaryArray[i, j] > max) // знаходження найбільшого значення у рядку
+                                if (primaryArray[i, j] > max) 
                                 {
                                     max = primaryArray[i, j];
                                     pos = j;
@@ -143,6 +145,7 @@ namespace SensorTouch
             currentPointIndex = 0;
             pictureBox1.Image = null;
             label2_XY.Text = $"X:{0} - Y:{0}";
+            
         }
         private void button5_Click_AplyMaxValue(object sender, EventArgs e)
         {
