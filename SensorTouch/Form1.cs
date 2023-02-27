@@ -1,20 +1,20 @@
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using static System.Windows.Forms.LinkLabel;
 
 namespace SensorTouch
 {
     public partial class Form1 : Form
     {
-        private int filterValueMax = 1000;
-        private int filterValueMin = 100;
+        private int filterValueMax = 1000, filterValueMin = 100;
         private string filePath = string.Empty;
         private int[,] primaryArray;
-        private int[] arrayY;
-        private int[] arrayValue;
-        private int currentPointIndex = 0;
-        private int currentPointCount = 0;
+        private int[] arrayY, arrayValue;
+        private int currentPointIndex = 0, currentPointCount = 0;
+        private string[] size, lines;
+        private int rowCount, colCount, matrixNum1, matrixNum2;
         public Form1()
         {
             InitializeComponent();
@@ -25,17 +25,7 @@ namespace SensorTouch
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
-            Graphics paintDot = pictureBox1.CreateGraphics();
-
-            if (arrayValue[currentPointIndex] >= filterValueMin && arrayValue[currentPointIndex] <= filterValueMax)
-            {
-                label2_XY.Text = String.Format($"X:{arrayY[currentPointIndex]} - Y:{currentPointIndex}");
-
-                paintDot.FillEllipse(Brushes.Red, arrayY[currentPointIndex], currentPointIndex, 7, 7);
-                currentPointCount++;
-            }
-            label2_CountPoint.Text = $"Count points:{currentPointCount}";
-            currentPointIndex++;
+            PaintDot();
 
             if (currentPointIndex >= primaryArray.GetLength(0))
             {
@@ -52,71 +42,16 @@ namespace SensorTouch
         }
         private void button1_Click_OpenFile(object sender, EventArgs e)
         {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
-            {
-                openFileDialog.InitialDirectory = "c:\\";
-                openFileDialog.Filter = "CSV files (*.csv)|*.csv";
-                openFileDialog.FilterIndex = 2;
-                openFileDialog.RestoreDirectory = true;
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    try
-                    {
-                        filePath = openFileDialog.FileName;
-                        string[] lines = File.ReadAllLines(filePath);
-                        string[] size = lines[0].Split(',');
-                        int rowCount = lines.Length;
-                        int matrixNum1 = int.Parse(size[0]);
-                        int matrixNum2 = int.Parse(size[1]);
-                        int colCount = matrixNum1 * matrixNum2;
-                        primaryArray = new int[rowCount - 1, colCount];
-
-                        for (int i = 1; i < lines.Length; i++)
-                        {
-                            string[] values = lines[i].Split(',');
-                            for (int j = 0; j < colCount; j++)
-                            {
-                                primaryArray[i - 1, j] = int.Parse(values[j]);
-                            }
-                        }
-
-                        arrayY = new int[primaryArray.GetLength(0)];
-                        arrayValue = new int[primaryArray.GetLength(0)];
-
-                        for (int i = 0; i < primaryArray.GetLength(0); i++)
-                        {
-                            int pos = 0;
-                            int max = primaryArray[i, 0]; 
-
-                            for (int j = 1; j < primaryArray.GetLength(1); j++)
-                            {
-                                if (primaryArray[i, j] > max) 
-                                {
-                                    max = primaryArray[i, j];
-                                    pos = j;
-                                }
-                            }
-                            arrayValue[i] = max;
-                            arrayY[i] = pos;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"{ex.Message}", "Something wrong", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                        Application.Restart();
-                    }
-                    trackBar1.Enabled = true;
-                    trackBar1.Enabled = true;
-                    button1_OpenFile.Enabled = true;
-                    button2_Start.Enabled = true;
-                    button3_Stop.Enabled = true;
-                    button4_Clear.Enabled = true;
-                    button5_AplyMaxValue.Enabled = true;
-                    textBox1.Enabled = true;
-                    textBox2.Enabled = true;
-                }
-            }
+            GetDataFromCsv();
+            trackBar1.Enabled = true;
+            trackBar1.Enabled = true;
+            button1_OpenFile.Enabled = true;
+            button2_Start.Enabled = true;
+            button3_Stop.Enabled = true;
+            button4_Clear.Enabled = true;
+            button5_AplyMaxValue.Enabled = true;
+            textBox1.Enabled = true;
+            textBox2.Enabled = true;
         }
         private void button2_Click_Start(object sender, EventArgs e)
         {
@@ -138,29 +73,115 @@ namespace SensorTouch
             textBox1.Enabled = true;
             textBox2.Enabled = true;
             timer1.Stop();
-
         }
         private void button4_Click_Clear(object sender, EventArgs e)
         {
             currentPointIndex = 0;
             pictureBox1.Image = null;
             label2_XY.Text = $"X:{0} - Y:{0}";
-            
+            label2_CountPoint.Text = $"Count points:{0}";
         }
         private void button5_Click_AplyMaxValue(object sender, EventArgs e)
         {
-
             try
             {
                 filterValueMax = int.Parse(textBox2.Text);
                 filterValueMin = int.Parse(textBox1.Text);
             }
-            catch(Exception ex) 
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Wrong input value! {ex.Message}", "Something wrong", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                Application.Restart();
+            }
+        }
+        private void PaintDot()
+        {
+            Graphics paintDot = pictureBox1.CreateGraphics();
+
+            if (arrayValue[currentPointIndex] >= filterValueMin && arrayValue[currentPointIndex] <= filterValueMax)
+            {
+                label2_XY.Text = String.Format($"X:{arrayY[currentPointIndex]} - Y:{currentPointIndex}");
+
+                paintDot.FillEllipse(Brushes.Red, arrayY[currentPointIndex], currentPointIndex, 7, 7);
+                currentPointCount++;
+            }
+            label2_CountPoint.Text = $"Count points:{currentPointCount}";
+            currentPointIndex++;
+        }
+        private void GetDataFromCsv()
+        {
+            GetMass();
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.InitialDirectory = "c:\\";
+                openFileDialog.Filter = "CSV files (*.csv)|*.csv";
+                openFileDialog.FilterIndex = 2;
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        filePath = openFileDialog.FileName;
+                        lines = File.ReadAllLines(filePath);
+                        size = lines[0].Split(',');
+                        rowCount = lines.Length;
+                        matrixNum1 = int.Parse(size[0]);
+                        matrixNum2 = int.Parse(size[1]);
+                        colCount = matrixNum1 * matrixNum2;
+                        primaryArray = new int[rowCount - 1, colCount];
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"{ex.Message}", "Something wrong", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                        Application.Restart();
+                    }
+
+                }
+            }
+        }
+        private void GetMass()
+        {
+            try
+            {
+                for (int i = 1; i < lines.Length; i++)
+                {
+                    string[] values = lines[i].Split(',');
+                    for (int j = 0; j < colCount; j++)
+                    {
+                        primaryArray[i - 1, j] = int.Parse(values[j]);
+                    }
+                }
+
+                arrayY = new int[primaryArray.GetLength(0)];
+                arrayValue = new int[primaryArray.GetLength(0)];
+
+                for (int i = 0; i < primaryArray.GetLength(0); i++)
+                {
+                    int pos = 0;
+                    int max = primaryArray[i, 0];
+
+                    for (int j = 1; j < primaryArray.GetLength(1); j++)
+                    {
+                        if (primaryArray[i, j] > max)
+                        {
+                            max = primaryArray[i, j];
+                            pos = j;
+                        }
+                    }
+                    arrayValue[i] = max;
+                    arrayY[i] = pos;
+                }
+            }
+            catch (Exception ex) 
             {
                 MessageBox.Show($"{ex.Message}", "Something wrong", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 Application.Restart();
             }
         }
-
     }
 }
+
+
+
+
