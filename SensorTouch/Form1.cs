@@ -141,10 +141,6 @@ namespace SensorTouch
                 }
             }
         }
-        private void GetFilteredArray() 
-        {
-        
-        }
         private void GetArray()
         {
             try
