@@ -110,7 +110,6 @@ namespace SensorTouch
         }
         private void GetDataFromCsv()
         {
-            GetMass();
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = "c:\\";
@@ -130,6 +129,8 @@ namespace SensorTouch
                         matrixNum2 = int.Parse(size[1]);
                         colCount = matrixNum1 * matrixNum2;
                         primaryArray = new int[rowCount - 1, colCount];
+                        GetMass();
+
                     }
                     catch (Exception ex)
                     {
