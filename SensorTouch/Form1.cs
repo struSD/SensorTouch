@@ -129,7 +129,7 @@ namespace SensorTouch
                         matrixNum2 = int.Parse(size[1]);
                         colCount = matrixNum1 * matrixNum2;
                         primaryArray = new int[rowCount - 1, colCount];
-                        GetMass();
+                        GetArray();
 
                     }
                     catch (Exception ex)
@@ -141,7 +141,11 @@ namespace SensorTouch
                 }
             }
         }
-        private void GetMass()
+        private void GetFilteredArray() 
+        {
+        
+        }
+        private void GetArray()
         {
             try
             {
