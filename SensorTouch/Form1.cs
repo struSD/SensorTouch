@@ -12,12 +12,15 @@ namespace SensorTouch
         private string filePath = string.Empty;
         private int[,] primaryArray;
         private int[] arrayY, arrayValue;
-        private int currentPointIndex = 0, currentPointCount = 0;
+        private int currentPointIndex = 0;
         private string[] size, lines;
         private int rowCount, colCount, matrixNum1, matrixNum2;
+        private Size oldSize;
+        private Size newSize;
         public Form1()
         {
             InitializeComponent();
+            oldSize = pictureBox1.Size;
         }
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
@@ -53,6 +56,14 @@ namespace SensorTouch
             textBox1.Enabled = true;
             textBox2.Enabled = true;
         }
+
+        private void pictureBox1_Resize(object sender, EventArgs e)
+        {
+            oldSize = this.oldSize;
+            // «бер≥гаЇмо новий розм≥р форми
+            newSize = this.Size;
+        }
+
         private void button2_Click_Start(object sender, EventArgs e)
         {
             timer1.Interval = trackBar1.Value;
@@ -79,7 +90,6 @@ namespace SensorTouch
             currentPointIndex = 0;
             pictureBox1.Image = null;
             label2_XY.Text = $"X:{0} - Y:{0}";
-            label2_CountPoint.Text = $"Count points:{0}";
         }
         private void button5_Click_AplyMaxValue(object sender, EventArgs e)
         {
@@ -97,16 +107,20 @@ namespace SensorTouch
         private void PaintDot()
         {
             Graphics paintDot = pictureBox1.CreateGraphics();
+            double originalX = arrayY[currentPointIndex];
+            double originalY = currentPointIndex;
+
+            double X = (originalX / oldSize.Width) * pictureBox1.Width;
+            double Y = (originalY / oldSize.Height) * pictureBox1.Height;
 
             if (arrayValue[currentPointIndex] >= filterValueMin && arrayValue[currentPointIndex] <= filterValueMax)
             {
-                label2_XY.Text = String.Format($"X:{arrayY[currentPointIndex]} - Y:{currentPointIndex}");
+                label2_XY.Text = String.Format($"X:{(int)X} - Y:{(int)Y}");
 
-                paintDot.FillEllipse(Brushes.Red, arrayY[currentPointIndex], currentPointIndex, 7, 7);
-                currentPointCount++;
+                paintDot.FillEllipse(Brushes.Red, (int)X, (int)Y, 7, 7);
             }
-            label2_CountPoint.Text = $"Count points:{currentPointCount}";
             currentPointIndex++;
+            
         }
         private void GetDataFromCsv()
         {
