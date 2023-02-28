@@ -105,21 +105,29 @@ namespace SensorTouch
         }
         private void PaintDot()
         {
-            Graphics paintDot = pictureBox1.CreateGraphics();
-
-            double originalX = arrayX[currentPointIndex];
-            double originalY = currentPointIndex;
-
-            double X = (originalX / oldSize.Width) * pictureBox1.Width;
-            double Y = (originalY / oldSize.Height) * pictureBox1.Height;
-
-            if (arrayValue[currentPointIndex] >= filterValueMin && arrayValue[currentPointIndex] <= filterValueMax)
+            try
             {
-                label2_XY.Text = String.Format($"X:{(int)X} - Y:{(int)Y}");
+                Graphics paintDot = pictureBox1.CreateGraphics();
 
-                paintDot.FillEllipse(Brushes.Red, (int)X, (int)Y, 7, 7);
+                double originalX = arrayX[currentPointIndex];
+                double originalY = currentPointIndex;
+
+                double X = (originalX / oldSize.Width) * pictureBox1.Width;
+                double Y = (originalY / oldSize.Height) * pictureBox1.Height;
+
+                if (arrayValue[currentPointIndex] >= filterValueMin && arrayValue[currentPointIndex] <= filterValueMax)
+                {
+                    label2_XY.Text = String.Format($"X:{(int)X} - Y:{(int)Y}");
+
+                    paintDot.FillEllipse(Brushes.Red, (int)X, (int)Y, 7, 7);
+                }
+                currentPointIndex++;
             }
-            currentPointIndex++;
+            catch(Exception ex) 
+            {
+                MessageBox.Show($"{ex.Message}", "Something wrong", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                Application.Restart();
+            }
         }
         private void GetDataFromCsv()
         {
