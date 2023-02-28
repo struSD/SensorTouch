@@ -11,7 +11,7 @@ namespace SensorTouch
         private int filterValueMax = 1000, filterValueMin = 100;
         private string filePath = string.Empty;
         private int[,] primaryArray;
-        private int[] arrayY, arrayValue;
+        private int[] arrayX, arrayY, arrayValue;
         private int currentPointIndex = 0;
         private string[] size, lines;
         private int rowCount, colCount, matrixNum1, matrixNum2;
@@ -60,7 +60,6 @@ namespace SensorTouch
         private void pictureBox1_Resize(object sender, EventArgs e)
         {
             oldSize = this.oldSize;
-            // «бер≥гаЇмо новий розм≥р форми
             newSize = this.Size;
         }
 
@@ -107,7 +106,8 @@ namespace SensorTouch
         private void PaintDot()
         {
             Graphics paintDot = pictureBox1.CreateGraphics();
-            double originalX = arrayY[currentPointIndex];
+
+            double originalX = arrayX[currentPointIndex];
             double originalY = currentPointIndex;
 
             double X = (originalX / oldSize.Width) * pictureBox1.Width;
@@ -120,7 +120,6 @@ namespace SensorTouch
                 paintDot.FillEllipse(Brushes.Red, (int)X, (int)Y, 7, 7);
             }
             currentPointIndex++;
-            
         }
         private void GetDataFromCsv()
         {
@@ -151,7 +150,6 @@ namespace SensorTouch
                         MessageBox.Show($"{ex.Message}", "Something wrong", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         Application.Restart();
                     }
-
                 }
             }
         }
@@ -168,7 +166,8 @@ namespace SensorTouch
                     }
                 }
 
-                arrayY = new int[primaryArray.GetLength(0)];
+                arrayX = new int[primaryArray.GetLength(0)];
+                arrayY = new int[primaryArray.GetLength(1)];
                 arrayValue = new int[primaryArray.GetLength(0)];
 
                 for (int i = 0; i < primaryArray.GetLength(0); i++)
@@ -185,7 +184,7 @@ namespace SensorTouch
                         }
                     }
                     arrayValue[i] = max;
-                    arrayY[i] = pos;
+                    arrayX[i] = pos;
                 }
             }
             catch (Exception ex) 
