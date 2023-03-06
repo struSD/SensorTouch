@@ -15,6 +15,7 @@ namespace SensorTouch
         private int currentPointIndex = 0;
         private string[] size, lines;
         private int rowCount, colCount, matrixNum1, matrixNum2;
+        List<Point> pointsList = new List<Point>();
         private Size oldSize;
         private Size newSize;
         public Form1()
@@ -30,7 +31,7 @@ namespace SensorTouch
         {
             PaintDot();
 
-            if (currentPointIndex >= primaryArray.GetLength(0))
+            if (currentPointIndex >= pointsList.Count)
             {
                 timer1.Stop();
                 currentPointIndex = 0;
@@ -96,6 +97,8 @@ namespace SensorTouch
             {
                 filterValueMax = int.Parse(textBox2.Text);
                 filterValueMin = int.Parse(textBox1.Text);
+                pointsList.Clear();
+                FilterArr();
             }
             catch (Exception ex)
             {
@@ -109,24 +112,37 @@ namespace SensorTouch
             {
                 Graphics paintDot = pictureBox1.CreateGraphics();
 
-                double originalX = arrayX[currentPointIndex];
-                double originalY = currentPointIndex;
+                // double originalX_old = arrayX[currentPointIndex];
+                // double originalY_old = arrayY[currentPointIndex];
+
+                double originalX = pointsList[currentPointIndex].X;
+                double originalY = pointsList[currentPointIndex].Y;
 
                 double X = (originalX / oldSize.Width) * pictureBox1.Width;
                 double Y = (originalY / oldSize.Height) * pictureBox1.Height;
 
-                if (arrayValue[currentPointIndex] >= filterValueMin && arrayValue[currentPointIndex] <= filterValueMax)
-                {
-                    label2_XY.Text = String.Format($"X:{(int)X} - Y:{(int)Y}");
+                // if (arrayValue[currentPointIndex] >= filterValueMin && arrayValue[currentPointIndex] <= filterValueMax)
 
-                    paintDot.FillEllipse(Brushes.Red, (int)X, (int)Y, 7, 7);
-                }
+                label2_XY.Text = String.Format($"X:{(int)X} - Y:{(int)Y}");
+
+                paintDot.FillEllipse(Brushes.Red, (int)X, (int)Y, 7, 7);
                 currentPointIndex++;
             }
             catch(Exception ex) 
             {
                 MessageBox.Show($"{ex.Message}", "Something wrong", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 Application.Restart();
+            }
+        }
+        private void FilterArr() 
+        {
+            for (int i = 0; i< arrayValue.Length; i++)
+            {
+                if (arrayValue[i] >= filterValueMin && arrayValue[i] <= filterValueMax)
+                {
+                    Point filterPoint = new Point(arrayX[i], arrayY[i]);
+                    pointsList.Add(filterPoint);
+                }
             }
         }
         private void GetDataFromCsv()
@@ -151,7 +167,6 @@ namespace SensorTouch
                         colCount = matrixNum1 * matrixNum2;
                         primaryArray = new int[rowCount - 1, colCount];
                         GetArray();
-
                     }
                     catch (Exception ex)
                     {
@@ -185,6 +200,7 @@ namespace SensorTouch
 
                     for (int j = 1; j < primaryArray.GetLength(1); j++)
                     {
+                        arrayY[j] = j;
                         if (primaryArray[i, j] > max)
                         {
                             max = primaryArray[i, j];
@@ -200,6 +216,7 @@ namespace SensorTouch
                 MessageBox.Show($"{ex.Message}", "Something wrong", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                 Application.Restart();
             }
+            FilterArr();
         }
     }
 }
