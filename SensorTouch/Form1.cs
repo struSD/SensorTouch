@@ -112,16 +112,11 @@ namespace SensorTouch
             {
                 Graphics paintDot = pictureBox1.CreateGraphics();
 
-                // double originalX_old = arrayX[currentPointIndex];
-                // double originalY_old = arrayY[currentPointIndex];
-
                 double originalX = pointsList[currentPointIndex].X;
                 double originalY = pointsList[currentPointIndex].Y;
 
                 double X = (originalX / oldSize.Width) * pictureBox1.Width;
                 double Y = (originalY / oldSize.Height) * pictureBox1.Height;
-
-                // if (arrayValue[currentPointIndex] >= filterValueMin && arrayValue[currentPointIndex] <= filterValueMax)
 
                 label2_XY.Text = String.Format($"X:{(int)X} - Y:{(int)Y}");
 
